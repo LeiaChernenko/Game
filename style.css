@@ -1,0 +1,232 @@
+@font-face {
+    font-family: 'Irpin Type';
+    src: url('./fonts/IrpinType-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.header{
+    font-family: 'Irpin Type', sans-serif;
+    width: 100%;
+    height: 80px;
+    background: #753BBD;
+    color: #2CD5C4;
+    font-size: 20px;
+    display: flex;
+    padding: 20px 20px 20px;
+    justify-content: space-around;
+    align-items: center;
+    box-sizing: border-box;
+}
+.main{
+    width: 100%;
+    height: 1000px;
+    box-sizing: border-box;
+    background: #FDF38A;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.game {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 6px;
+
+    width: 700px;
+    height: 700px;
+}
+
+.card {
+    aspect-ratio: 1 / 1;
+
+    background: #753BBD;
+    border-radius: 7px;
+    cursor: pointer;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    overflow: hidden;
+
+    font-family: 'Irpin Type', sans-serif;
+    font-size: 20px;
+}
+
+.card:hover {
+    transform: scale(1.03);
+}
+
+.card.matched {
+    background: #2CD5C4;
+    cursor: default;
+}
+
+.card video {
+    width: 80%;
+    height: 80%;
+
+    object-fit: contain;
+}
+
+
+.menu {
+    position: relative;
+}
+
+.menu button {
+    font-family: 'Irpin Type', sans-serif;
+    font-size: 20px;
+
+    background: none;
+    border: none;
+
+    color: #2CD5C4;
+    cursor: pointer;
+}
+
+.levels {
+    display: none;
+
+    position: absolute;
+    top: 35px;
+    left: 0;
+
+    background: #753BBD;
+    padding: 10px;
+
+    border-radius: 10px;
+
+    flex-direction: column;
+    gap: 5px;
+
+    z-index: 10;
+}
+
+.levels.active {
+    display: flex;
+}
+
+.levels button {
+    white-space: nowrap;
+}
+
+.title {
+    font-size: 30px;
+}
+
+.info {
+    position: relative;
+}
+
+.rulesButton {
+    font-family: 'Irpin Type', sans-serif;
+    font-size: 20px;
+    background: none;
+    border: none;
+    color: #2CD5C4;
+    cursor: pointer;
+}
+
+.textRules {
+    display: none;
+
+    position: absolute;
+    top: 45px;
+    right: 0;
+
+    width: 350px;
+    max-height: 500px;
+    overflow-y: auto;
+
+    padding: 20px;
+
+    background: #753BBD;
+    color: #2CD5C4;
+
+    border-radius: 10px;
+
+    z-index: 20;
+
+    box-sizing: border-box;
+}
+
+.textRules.active {
+    display: block;
+}
+
+
+footer{
+    font-family: 'Irpin Type', sans-serif;
+    width: 100%;
+    height: 50px;
+    background: #753BBD;
+    color: #2CD5C4;
+    font-size: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+
+@media (max-width: 600px) {
+
+    /* Хедер */
+    .header {
+        height: 60px;
+        padding: 10px;
+    }
+
+    .menu button,
+    .rulesButton {
+        font-size: 15px;
+    }
+
+    .title {
+        font-size: 25px;
+    }
+
+    .main {
+        height: calc(100vh - 60px);
+        padding: 15px;
+        box-sizing: border-box;
+    }
+
+    .game {
+        width: 100%;
+        max-width: 95vw;
+        height: auto;
+        aspect-ratio: 1 / 1;
+
+        gap: 4px;
+    }
+
+    .card {
+        width: 100%;
+        height: auto;
+        aspect-ratio: 1 / 1;
+
+        border-radius: 5px;
+        font-size: 15px;
+    }
+
+    .card video {
+        width: 80%;
+        height: 80%;
+        object-fit: contain;
+    }
+
+    .levels {
+        top: 30px;
+        padding: 7px;
+    }
+
+    .levels button {
+        font-size: 15px;
+    }
+
+    .footer {
+        font-size: 10px;
+    }
+}
