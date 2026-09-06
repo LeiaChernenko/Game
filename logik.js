@@ -1,7 +1,39 @@
 const game = document.getElementById('game');
-
 const menuButton = document.getElementById('menuButton');
 const levels = document.getElementById('levels');
+const startButton = document.getElementById('startButton');
+const timer = document.getElementById('timer');
+
+let timeLeft = 60;
+let timerInterval = null;
+let gameStarted = false;
+
+function startTimer(minutes) {
+    clearInterval(timerInterval);
+    timeLeft = minutes * 60;
+    updateTimer();
+    timerInterval = setInterval(() => {
+        timeLeft--;
+        updateTimer();
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            lockBoard = true;
+            gameStarted = false;
+            alert("Time over!");
+            startButton.style.display = 'block';
+        }
+    }, 1000);
+}
+
+function updateTimer() {
+    const minutes = Math.floor(timeLeft / 60);
+    const seconds = timeLeft % 60;
+    timer.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+}
+
+const level4Music = new Audio('music/level4.mp3');
+level4Music.loop = true;
+level4Music.volume = 0.2;
 
 let firstCard = null;
 let secondCard = null;
@@ -57,7 +89,55 @@ const stickers = [
     'images/sticker47.webm',
     'images/sticker48.webm',
     'images/sticker49.webm',
-    'images/sticker50.webm'
+    'images/sticker50.webm',
+    'images/sticker51.webm',
+    'images/sticker52.webm',
+    'images/sticker53.webm',
+    'images/sticker54.webm',
+    'images/sticker55.webm',
+    'images/sticker56.webm',
+    'images/sticker57.webm',
+    'images/sticker58.webm',
+    'images/sticker59.webm',
+    'images/sticker60.webm',
+    'images/sticker61.webm',
+    'images/sticker62.webm',
+    'images/sticker63.webm',
+    'images/sticker64.webm',
+    'images/sticker65.webm',
+    'images/sticker66.webm',
+    'images/sticker67.webm',
+    'images/sticker68.webm',
+    'images/sticker69.webm',
+    'images/sticker70.webm',
+    'images/sticker71.webm',
+    'images/sticker72.webm',
+    'images/sticker73.webm',
+    'images/sticker74.webm',
+    'images/sticker75.webm',
+    'images/sticker76.webm',
+    'images/sticker77.webm',
+    'images/sticker78.webm',
+    'images/sticker79.webm',
+    'images/sticker80.webm',
+    'images/sticker81.webm',
+    'images/sticker82.webm',
+    'images/sticker83.webm',
+    'images/sticker84.webm',
+    'images/sticker85.webm',
+    'images/sticker86.webm',
+    'images/sticker87.webm',
+    'images/sticker88.webm',
+    'images/sticker89.webm',
+    'images/sticker90.webm',
+    'images/sticker91.webm',
+    'images/sticker92.webm',
+    'images/sticker93.webm',
+    'images/sticker94.webm',
+    'images/sticker95.webm',
+    'images/sticker96.webm',
+    'images/sticker97.webm',
+    'images/sticker98.webm',
 ];
 
 menuButton.addEventListener('click', () => {
@@ -66,17 +146,13 @@ menuButton.addEventListener('click', () => {
 
 function showSticker(card, sticker) {
     card.innerHTML = '';
-
     const video = document.createElement('video');
-
     video.src = sticker;
     video.autoplay = true;
     video.loop = true;
     video.muted = true;
     video.playsInline = true;
-
     card.appendChild(video);
-
     video.play().catch(() => {});
 }
 
@@ -84,11 +160,14 @@ function hideSticker(card) {
     card.innerHTML = '?';
 }
 
+
+
 function startGame(size) {
     game.innerHTML = '';
     firstCard = null;
     secondCard = null;
     lockBoard = false;
+    gameStarted = true;
     const totalCards = size * size;
     const pairs = totalCards / 2;
     const selectedStickers = stickers.slice(0, pairs);
@@ -99,72 +178,103 @@ function startGame(size) {
     cardStickers.sort(() => Math.random() - 0.5);
     game.style.gridTemplateColumns = `repeat(${size}, 1fr)`;
     cardStickers.forEach((sticker) => {
-
         const card = document.createElement('div');
-
         card.classList.add('card');
-
         card.textContent = '?';
-
         card.dataset.symbol = sticker;
         card.addEventListener('click', () => {
+            if (!gameStarted) return;
             if (lockBoard) return;
             if (card === firstCard) return;
             if (card.classList.contains('matched')) return;
-
             showSticker(card, sticker);
-
             if (firstCard === null) {
                 firstCard = card;
                 return;
             }
             secondCard = card;
             lockBoard = true;
-
             if (
                 firstCard.dataset.symbol ===
                 secondCard.dataset.symbol
             ) {
-
                 firstCard.classList.add('matched');
                 secondCard.classList.add('matched');
-
                 firstCard = null;
                 secondCard = null;
                 lockBoard = false;
+                const matchedCards = game.querySelectorAll('.matched');
+                if (matchedCards.length === game.children.length) {
+                  clearInterval(timerInterval);
+                  gameStarted = false;
+                  lockBoard = true;
 
+                  confetti({
+                    particleCount: 200,
+                    spread: 100,
+                    origin: {
+                    y: 0.6
+                    }
+                });
+
+                startButton.style.display = 'block';
+
+                setTimeout(() => {
+                  alert("You win!");
+                }, 500);  
+            }
             } else {
                 setTimeout(() => {
-                    hideSticker(firstCard);
-                    hideSticker(secondCard);
-
+                    if (firstCard && secondCard) {
+                        hideSticker(firstCard);
+                        hideSticker(secondCard);
+                    }
                     firstCard = null;
                     secondCard = null;
-
                     lockBoard = false;
-
                 }, 1000);
             }
         });
-
-
         game.appendChild(card);
     });
 }
 
 const levelButtons = document.querySelectorAll('.levels button');
-
+let currentLevel = 4;
 
 levelButtons.forEach((button) => {
     button.addEventListener('click', () => {
-        const size = Number(button.dataset.size);
-        startGame(size);
+        currentLevel = Number(button.dataset.size);
+        clearInterval(timerInterval);
+        gameStarted = false;
+        lockBoard = true;
+        level4Music.pause();
+        level4Music.currentTime = 0;
+        startButton.style.display = 'block';
         levels.classList.remove('active');
     });
-
 });
 
-startGame(4);
+startButton.addEventListener('click', () => {
+    startGame(currentLevel);
+    if (currentLevel === 4) {
+        startTimer(1);
+    } else if (currentLevel === 6) {
+        startTimer(2);
+    } else if (currentLevel === 10) {
+        startTimer(5);
+    } else if (currentLevel === 14) {
+        startTimer(10);
+    }
+    if (currentLevel === 14) {
+        level4Music.currentTime = 0;
+        level4Music.play().catch(() => {});
+    } else {
+        level4Music.pause();
+        level4Music.currentTime = 0;
+    }
+    startButton.style.display = 'none';
+});
 
 const rulesButton = document.getElementById('rulesButton');
 const textRules = document.getElementById('textRules');
