@@ -264,7 +264,7 @@ startButton.addEventListener('click', () => {
     } else if (currentLevel === 10) {
         startTimer(5);
     } else if (currentLevel === 14) {
-        startTimer(10);
+        startTimer(15);
     }
     if (currentLevel === 14) {
         level4Music.currentTime = 0;
