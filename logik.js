@@ -10,6 +10,7 @@ let gameStarted = false;
 
 function startTimer(minutes) {
     clearInterval(timerInterval);
+
     timeLeft = minutes * 60;
     updateTimer();
 
@@ -19,6 +20,7 @@ function startTimer(minutes) {
 
         if (timeLeft <= 0) {
             clearInterval(timerInterval);
+
             lockBoard = true;
             gameStarted = false;
 
@@ -28,6 +30,7 @@ function startTimer(minutes) {
             level4Music.currentTime = 0;
 
             alert("Time over!");
+
             startButton.style.display = 'block';
         }
     }, 1000);
@@ -36,10 +39,12 @@ function startTimer(minutes) {
 function updateTimer() {
     const minutes = Math.floor(timeLeft / 60);
     const seconds = timeLeft % 60;
+
     timer.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
 }
 
 const level4Music = new Audio('music/level4.mp3');
+
 level4Music.loop = true;
 level4Music.volume = 0.2;
 
@@ -169,10 +174,11 @@ function showSticker(card) {
 
     if (!video) return;
 
-    video.currentTime = 0;
-    video.play().catch(() => {});
-
     card.classList.add('open');
+
+    video.currentTime = 0;
+
+    video.play().catch(() => {});
 }
 
 function hideSticker(card) {
@@ -214,6 +220,7 @@ function startGame(size) {
 
     for (let i = cardStickers.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
+
         [cardStickers[i], cardStickers[j]] = [
             cardStickers[j],
             cardStickers[i]
@@ -230,12 +237,16 @@ function startGame(size) {
         card.dataset.symbol = sticker;
 
         const video = createVideo(sticker);
+
         card.appendChild(video);
 
         card.addEventListener('click', () => {
             if (!gameStarted) return;
+
             if (lockBoard) return;
+
             if (card === firstCard) return;
+
             if (card.classList.contains('matched')) return;
 
             showSticker(card);
@@ -371,6 +382,7 @@ startButton.addEventListener('click', () => {
 
     if (currentLevel === 14) {
         level4Music.currentTime = 0;
+
         level4Music.play().catch(() => {});
     } else {
         level4Music.pause();

@@ -40,35 +40,35 @@
 
 .card {
     aspect-ratio: 1 / 1;
-
     background: #753BBD;
     border-radius: 7px;
     cursor: pointer;
-
     display: flex;
     justify-content: center;
     align-items: center;
-
     overflow: hidden;
-
     font-family: 'Irpin Type', sans-serif;
     font-size: 20px;
 }
 
-.card:hover {
-    transform: scale(1.03);
+.card video {
+    display: none;
+    width: 80%;
+    height: 80%;
+    object-fit: contain;
+}
+
+.card.open video {
+    display: block;
+}
+
+.card.open {
+    font-size: 0;
 }
 
 .card.matched {
     background: #2CD5C4;
     cursor: default;
-}
-
-.card video {
-    width: 80%;
-    height: 80%;
-
-    object-fit: contain;
 }
 
 
