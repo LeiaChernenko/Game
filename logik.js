@@ -21,8 +21,12 @@ function startTimer(minutes) {
             clearInterval(timerInterval);
             lockBoard = true;
             gameStarted = false;
+
+            stopAllVideos();
+
             level4Music.pause();
             level4Music.currentTime = 0;
+
             alert("Time over!");
             startButton.style.display = 'block';
         }
@@ -148,33 +152,46 @@ menuButton.addEventListener('click', () => {
     levels.classList.toggle('active');
 });
 
-function showSticker(card, sticker) {
-    card.innerHTML = '';
-
+function createVideo(sticker) {
     const video = document.createElement('video');
 
     video.src = sticker;
-    video.autoplay = true;
     video.loop = true;
     video.muted = true;
     video.playsInline = true;
     video.preload = 'none';
 
-    card.appendChild(video);
+    return video;
+}
 
+function showSticker(card) {
+    const video = card.querySelector('video');
+
+    if (!video) return;
+
+    video.currentTime = 0;
     video.play().catch(() => {});
+
+    card.classList.add('open');
 }
 
 function hideSticker(card) {
     const video = card.querySelector('video');
 
-    if (video) {
-        video.pause();
-        video.removeAttribute('src');
-        video.load();
-    }
+    if (!video) return;
 
-    card.innerHTML = '?';
+    video.pause();
+    video.currentTime = 0;
+
+    card.classList.remove('open');
+}
+
+function stopAllVideos() {
+    const videos = game.querySelectorAll('video');
+
+    videos.forEach((video) => {
+        video.pause();
+    });
 }
 
 function startGame(size) {
@@ -197,7 +214,10 @@ function startGame(size) {
 
     for (let i = cardStickers.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
-        [cardStickers[i], cardStickers[j]] = [cardStickers[j], cardStickers[i]];
+        [cardStickers[i], cardStickers[j]] = [
+            cardStickers[j],
+            cardStickers[i]
+        ];
     }
 
     game.style.gridTemplateColumns = `repeat(${size}, 1fr)`;
@@ -209,13 +229,16 @@ function startGame(size) {
         card.textContent = '?';
         card.dataset.symbol = sticker;
 
+        const video = createVideo(sticker);
+        card.appendChild(video);
+
         card.addEventListener('click', () => {
             if (!gameStarted) return;
             if (lockBoard) return;
             if (card === firstCard) return;
             if (card.classList.contains('matched')) return;
 
-            showSticker(card, sticker);
+            showSticker(card);
 
             if (firstCard === null) {
                 firstCard = card;
@@ -304,6 +327,8 @@ levelButtons.forEach((button) => {
 
         gameStarted = false;
         lockBoard = true;
+
+        stopAllVideos();
 
         level4Music.pause();
         level4Music.currentTime = 0;
