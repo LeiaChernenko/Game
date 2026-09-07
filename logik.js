@@ -3,10 +3,13 @@ const menuButton = document.getElementById('menuButton');
 const levels = document.getElementById('levels');
 const startButton = document.getElementById('startButton');
 const timer = document.getElementById('timer');
+const counter = document.getElementById('counter');
 
 let timeLeft = 60;
 let timerInterval = null;
 let gameStarted = false;
+let matchedPairs = 0;
+let totalPairs = 8;
 
 function startTimer(minutes) {
     clearInterval(timerInterval);
@@ -41,6 +44,10 @@ function updateTimer() {
     const seconds = timeLeft % 60;
 
     timer.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+}
+
+function updateCounter() {
+    counter.textContent = `${matchedPairs} / ${totalPairs}`;
 }
 
 const level4Music = new Audio('music/level4.mp3');
@@ -177,7 +184,6 @@ function showSticker(card) {
     card.classList.add('open');
 
     video.currentTime = 0;
-
     video.play().catch(() => {});
 }
 
@@ -209,9 +215,13 @@ function startGame(size) {
     gameStarted = true;
 
     const totalCards = size * size;
-    const pairs = totalCards / 2;
 
-    const selectedStickers = stickers.slice(0, pairs);
+    totalPairs = totalCards / 2;
+    matchedPairs = 0;
+
+    updateCounter();
+
+    const selectedStickers = stickers.slice(0, totalPairs);
 
     const cardStickers = [
         ...selectedStickers,
@@ -265,6 +275,9 @@ function startGame(size) {
             ) {
                 firstCard.classList.add('matched');
                 secondCard.classList.add('matched');
+
+                matchedPairs++;
+                updateCounter();
 
                 const firstVideo = firstCard.querySelector('video');
                 const secondVideo = secondCard.querySelector('video');
@@ -353,15 +366,22 @@ levelButtons.forEach((button) => {
 
         if (currentLevel === 4) {
             timeLeft = 60;
+            totalPairs = 8;
         } else if (currentLevel === 6) {
             timeLeft = 120;
+            totalPairs = 18;
         } else if (currentLevel === 10) {
             timeLeft = 300;
+            totalPairs = 50;
         } else if (currentLevel === 14) {
             timeLeft = 900;
+            totalPairs = 98;
         }
 
+        matchedPairs = 0;
+
         updateTimer();
+        updateCounter();
 
         levels.classList.remove('active');
     });
@@ -382,7 +402,6 @@ startButton.addEventListener('click', () => {
 
     if (currentLevel === 14) {
         level4Music.currentTime = 0;
-
         level4Music.play().catch(() => {});
     } else {
         level4Music.pause();

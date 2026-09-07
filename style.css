@@ -171,6 +171,16 @@
     color: #753BBD;
 }
 
+.counter {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+
+    font-family: 'Irpin Type', sans-serif;
+    font-size: 25px;
+    color: #753BBD;
+}
+
 .startButton {
     position: absolute;
 
