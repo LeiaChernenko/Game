@@ -8,6 +8,7 @@ const counter = document.getElementById('counter');
 let timeLeft = 60;
 let timerInterval = null;
 let gameStarted = false;
+
 let matchedPairs = 0;
 let totalPairs = 8;
 
@@ -28,9 +29,7 @@ function startTimer(minutes) {
             gameStarted = false;
 
             stopAllVideos();
-
-            level4Music.pause();
-            level4Music.currentTime = 0;
+            stopAllMusic();
 
             alert("Time over!");
 
@@ -50,10 +49,33 @@ function updateCounter() {
     counter.textContent = `${matchedPairs} / ${totalPairs}`;
 }
 
-const level4Music = new Audio('music/level4.mp3');
+const level1Music = new Audio('music/level1.mp3');
+level1Music.loop = true;
+level1Music.volume = 0.2;
 
+const level4Music = new Audio('music/level4.mp3');
 level4Music.loop = true;
 level4Music.volume = 0.2;
+
+function stopAllMusic() {
+    level1Music.pause();
+    level1Music.currentTime = 0;
+
+    level4Music.pause();
+    level4Music.currentTime = 0;
+}
+
+function playLevelMusic() {
+    stopAllMusic();
+
+    if (currentLevel === 4) {
+        level1Music.play().catch(() => {});
+    }
+
+    if (currentLevel === 14) {
+        level4Music.play().catch(() => {});
+    }
+}
 
 let firstCard = null;
 let secondCard = null;
@@ -252,11 +274,8 @@ function startGame(size) {
 
         card.addEventListener('click', () => {
             if (!gameStarted) return;
-
             if (lockBoard) return;
-
             if (card === firstCard) return;
-
             if (card.classList.contains('matched')) return;
 
             showSticker(card);
@@ -300,8 +319,7 @@ function startGame(size) {
                     gameStarted = false;
                     lockBoard = true;
 
-                    level4Music.pause();
-                    level4Music.currentTime = 0;
+                    stopAllMusic();
 
                     confetti({
                         particleCount: 200,
@@ -353,9 +371,7 @@ levelButtons.forEach((button) => {
         lockBoard = true;
 
         stopAllVideos();
-
-        level4Music.pause();
-        level4Music.currentTime = 0;
+        stopAllMusic();
 
         game.innerHTML = '';
 
@@ -400,13 +416,7 @@ startButton.addEventListener('click', () => {
         startTimer(15);
     }
 
-    if (currentLevel === 14) {
-        level4Music.currentTime = 0;
-        level4Music.play().catch(() => {});
-    } else {
-        level4Music.pause();
-        level4Music.currentTime = 0;
-    }
+    playLevelMusic();
 
     startButton.style.display = 'none';
 });
