@@ -57,9 +57,23 @@ const level4Music = new Audio('music/level4.mp3');
 level4Music.loop = true;
 level4Music.volume = 0.2;
 
+const level3Music = new Audio('music/level3.mp3');
+level3Music.loop = true;
+level3Music.volume = 0.2;
+
+const level2Music = new Audio('music/level2.mp3');
+level2Music.loop = true;
+level2Music.volume = 0.2;
+
 function stopAllMusic() {
     level1Music.pause();
     level1Music.currentTime = 0;
+
+    level2Music.pause();
+    level2Music.currentTime = 0;
+
+    level3Music.pause();
+    level3Music.currentTime = 0;
 
     level4Music.pause();
     level4Music.currentTime = 0;
@@ -70,6 +84,14 @@ function playLevelMusic() {
 
     if (currentLevel === 4) {
         level1Music.play().catch(() => {});
+    }
+
+    if (currentLevel === 6) {
+        level2Music.play().catch(() => {});
+    }
+
+    if (currentLevel === 10) {
+        level3Music.play().catch(() => {});
     }
 
     if (currentLevel === 14) {
@@ -411,7 +433,7 @@ startButton.addEventListener('click', () => {
     } else if (currentLevel === 6) {
         startTimer(2);
     } else if (currentLevel === 10) {
-        startTimer(5);
+        startTimer(10);
     } else if (currentLevel === 14) {
         startTimer(15);
     }
